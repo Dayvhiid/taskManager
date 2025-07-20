@@ -1,0 +1,11 @@
+import express from 'express';
+import taskValidator from '../validator/taskValidator.js';
+import { getTasks, createTask, updateTask, deleteTask } from '../controllers/taskController.js';
+import auth from '../middleware/auth.js';
+import upload from '../middleware/file.js';
+const router = express.Router();
+router.get('/', auth, getTasks);
+router.post('/', auth, upload.single('attachment') ,taskValidator, createTask);
+router.put('/:id', auth , upload.single('attachment'),updateTask);
+router.delete('/:id', auth ,deleteTask);
+export default router;
