@@ -3,12 +3,15 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import authRoutes from './routes/authRoutes.js';
 import taskRoutes from './routes/taskRoutes.js';
+import helmet, { limiter, authLimiter } from './middleware/rateLimit.js';
 import cors from 'cors';
 dotenv.config();
 const app = express();
 app.use(express.json());
 app.use(cors());
-app.use('/api/auth', authRoutes);
+app.use(helmet());
+app.use(limiter);
+app.use('/api/auth', authLimiter,authRoutes);
 app.use('/api/tasks', taskRoutes);
 
 mongoose.connect(process.env.MONGO_URI)
