@@ -7,6 +7,7 @@ import teamRoutes from './routes/teamRoutes.js';
 import helmet from 'helmet';
 import  { limiter, authLimiter } from './middleware/rateLimit.js';
 import cors from 'cors';
+import  {notFoundHandler, errorHandler} from './middleware/notFound.js';
 dotenv.config();
 const app = express();
 app.use(express.json());
@@ -16,6 +17,7 @@ app.use(limiter);
 app.use('/api/auth', authLimiter,authRoutes);
 app.use('/api/tasks', taskRoutes);
 app.use('/api/teams', teamRoutes);
+app.use(notFoundHandler);
 
 mongoose.connect(process.env.MONGO_URI)
     .then(() => {
