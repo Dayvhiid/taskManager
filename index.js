@@ -8,6 +8,8 @@ import helmet from 'helmet';
 import  { limiter, authLimiter } from './middleware/rateLimit.js';
 import cors from 'cors';
 import  {notFoundHandler, errorHandler} from './middleware/notFound.js';
+
+
 dotenv.config();
 const app = express();
 app.use(express.json());
@@ -18,14 +20,14 @@ app.use('/api/auth', authLimiter,authRoutes);
 app.use('/api/tasks', taskRoutes);
 app.use('/api/teams', teamRoutes);
 app.use(notFoundHandler);
+app.use(errorHandler);
 
 mongoose.connect(process.env.MONGO_URI)
-    .then(() => {
-        console.log('Connected to MongoDB');
-        app.listen(process.env.PORT || 5000, () => {
-            console.log(`Server is running on port ${process.env.PORT || 5000}`);
-        });
-    })
-    .catch(err => {
-        console.error('MongoDB connection error:', err);
-    });
+       .then(() => {
+               console.log("MongoDB connected succefully");
+              const PORT = process.env.PORT || 5000;
+              app.listen(PORT, () => {
+                console.log(`Server is running on port ${PORT}`);
+              });
+       } )
+       .catch(err => console.error('MongoDB connection error:', err));
